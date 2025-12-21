@@ -1,6 +1,9 @@
+using System;
 using SaaSLite.Contracts;
 using System.Collections.Concurrent;
+using System.Net.Http;
 using System.Net.Http.Json;
+using System.Threading.Tasks;
 
 // Basic simulator for edge agent generating results and uploading to the Cloud API.
 var deviceId = "device-001";
