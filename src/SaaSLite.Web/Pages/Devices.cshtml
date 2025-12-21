@@ -1,0 +1,37 @@
+@page
+@model SaaSLite.Web.Pages.DevicesModel
+
+<h1>Devices</h1>
+
+<p>This page shows registered devices and their last seen status.</p>
+
+@if (Model.Devices is null || !Model.Devices.Any())
+{
+    <p>No devices were found.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Device ID</th>
+                <th>Display Name</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Last Seen (UTC)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var d in Model.Devices)
+            {
+                <tr>
+                    <td>@d.DeviceId</td>
+                    <td>@d.DisplayName</td>
+                    <td>@d.DeviceType</td>
+                    <td>@d.Status</td>
+                    <td>@d.LastSeenUtc?.ToString() ?? "Never"</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

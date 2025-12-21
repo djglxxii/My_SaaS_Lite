@@ -1,0 +1,37 @@
+@page
+@model SaaSLite.Web.Pages.ResultsModel
+
+<h1>Results</h1>
+
+<p>This page lists ingested results from the Cloud API.</p>
+
+@if (Model.Results is null || !Model.Results.Any())
+{
+    <p>No results were found.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Result ID</th>
+                <th>Device</th>
+                <th>Collected At (UTC)</th>
+                <th>Test Code</th>
+                <th>Patient ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model.Results)
+            {
+                <tr>
+                    <td>@r.ResultId</td>
+                    <td>@r.DeviceId</td>
+                    <td>@r.CollectedAtUtc</td>
+                    <td>@r.TestCode</td>
+                    <td>@r.PatientId</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

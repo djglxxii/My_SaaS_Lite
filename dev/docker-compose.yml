@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  cloudapi:
+    build:
+      context: ../src/SaaSLite.CloudApi
+      dockerfile: Dockerfile
+    ports:
+      - "5000:80"
+    volumes:
+      - clouddata:/app
+  web:
+    build:
+      context: ../src/SaaSLite.Web
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - cloudapi
+
+volumes:
+  clouddata:
+    driver: local
+
+## Note: Dockerfiles for the cloud API and web projects are not provided in this PoC skeleton.
