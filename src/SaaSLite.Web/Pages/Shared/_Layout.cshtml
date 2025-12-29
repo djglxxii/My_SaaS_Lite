@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SaaS Lite PoC</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+<header class="navbar">
+    <div class="nav-inner">
+        <div class="brand">
+            <div class="brand-badge"></div>
+            <div>
+                <div>SaaS Lite</div>
+                <div class="subtle">Proof-of-Concept</div>
+            </div>
+        </div>
+
+        <nav class="nav-links">
+            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link" href="/Results">Results</a>
+            <a class="nav-link" href="/Devices">Devices</a>
+            <a class="nav-link" href="/Exports">Exports</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    @RenderBody()
+
+    <div class="footer">
+        Demo UI (no security). Cloud API + Edge Agent + Web UI.
+    </div>
+</main>
+
+@RenderSection("Scripts", required: false)
+</body>
+</html>

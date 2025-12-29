@@ -1,9 +1,21 @@
 @page
 @model SaaSLite.Web.Pages.IndexModel
 
-<h1>Welcome to SaaS Lite PoC</h1>
+<div class="card">
+    <div class="page-header">
+        <h1>SaaS Lite PoC</h1>
+        <div class="subtle">Blue/white demo theme</div>
+    </div>
 
-<p>
-    This simple web UI is part of a proof‑of‑concept demonstrating the flow of results from edge devices
-    through the Cloud API into a web interface. Use the navigation links to view results, devices and exports.
-</p>
+    <p class="subtle" style="margin-top:0;">
+        EdgeAgent simulates device results, CloudApi ingests/persists them, and this UI displays devices and results.
+    </p>
+
+    <hr class="sep" />
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="btn" href="/Results">View Results</a>
+        <a class="btn btn-secondary" href="/Devices">View Devices</a>
+        <a class="btn btn-secondary" href="/Exports">Exports</a>
+    </div>
+</div>

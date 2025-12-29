@@ -1,51 +1,70 @@
 @page
 @model SaaSLite.Web.Pages.ResultsModel
 
-<h1>Results</h1>
+<div class="card">
+    <div class="page-header">
+        <h1>Results</h1>
+        <div class="subtle">Latest ingested results</div>
+    </div>
 
-<form method="get" style="margin-bottom: 1rem;">
-    <label>DeviceId:</label>
-    <input name="DeviceId" value="@Model.DeviceId" />
+    <form method="get" class="filters">
+        <div>
+            <label>DeviceId</label>
+            <input type="text" name="DeviceId" value="@Model.DeviceId" placeholder="device-001" />
+        </div>
 
-    <label style="margin-left: 1rem;">From (UTC):</label>
-    <input name="FromUtc" value="@(Model.FromUtc?.ToString("yyyy-MM-ddTHH:mm") ?? "")" />
+        <div>
+            <label>From (UTC)</label>
+            <input type="datetime-local" name="FromUtc"
+                   value="@(Model.FromUtc?.ToString("yyyy-MM-ddTHH:mm") ?? "")" />
+        </div>
 
-    <label style="margin-left: 1rem;">To (UTC):</label>
-    <input name="ToUtc" value="@(Model.ToUtc?.ToString("yyyy-MM-ddTHH:mm") ?? "")" />
+        <div>
+            <label>To (UTC)</label>
+            <input type="datetime-local" name="ToUtc"
+                   value="@(Model.ToUtc?.ToString("yyyy-MM-ddTHH:mm") ?? "")" />
+        </div>
 
-    <button type="submit" style="margin-left: 1rem;">Filter</button>
-    <a href="/Results" style="margin-left: .5rem;">Clear</a>
-</form>
+        <div>
+            <button class="btn" type="submit">Filter</button>
+            <a class="btn btn-secondary" href="/Results" style="margin-left:6px;">Clear</a>
+        </div>
+    </form>
 
-@if (Model.Results == null || !Model.Results.Any())
-{
-    <p>No results were found.</p>
-}
-else
-{
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>Collected (UTC)</th>
-            <th>Received (UTC)</th>
-            <th>Device</th>
-            <th>Test</th>
-            <th>Patient</th>
-            <th>ResultId</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var r in Model.Results)
-        {
-            <tr>
-                <td>@r.CollectedAtUtc.ToString("u")</td>
-                <td>@r.ReceivedAtUtc.ToString("u")</td>
-                <td>@r.DeviceId</td>
-                <td>@r.TestCode</td>
-                <td>@r.PatientId</td>
-                <td>@r.ResultId</td>
-            </tr>
-        }
-        </tbody>
-    </table>
-}
+    <hr class="sep" />
+
+    @if (Model.Results == null || !Model.Results.Any())
+    {
+        <p class="subtle">No results found.</p>
+    }
+    else
+    {
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Collected (UTC)</th>
+                        <th>Received (UTC)</th>
+                        <th>Device</th>
+                        <th>Test</th>
+                        <th>Patient</th>
+                        <th>ResultId</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var r in Model.Results)
+                {
+                    <tr>
+                        <td>@r.CollectedAtUtc.ToString("u")</td>
+                        <td>@r.ReceivedAtUtc.ToString("u")</td>
+                        <td>@r.DeviceId</td>
+                        <td>@r.TestCode</td>
+                        <td>@r.PatientId</td>
+                        <td>@r.ResultId</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

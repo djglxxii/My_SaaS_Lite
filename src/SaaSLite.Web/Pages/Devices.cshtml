@@ -1,37 +1,53 @@
 @page
 @model SaaSLite.Web.Pages.DevicesModel
 
-<h1>Devices</h1>
+<div class="card">
+    <div class="page-header">
+        <h1>Devices</h1>
+        <div class="subtle">Derived from heartbeat + ingestion</div>
+    </div>
 
-@if (Model.Devices == null || !Model.Devices.Any())
-{
-    <p>No devices were found.</p>
-}
-else
-{
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>DeviceId</th>
-            <th>SiteId</th>
-            <th>Type</th>
-            <th>Display Name</th>
-            <th>Last Seen (UTC)</th>
-            <th>Status</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var d in Model.Devices)
-        {
-            <tr>
-                <td>@d.DeviceId</td>
-                <td>@d.SiteId</td>
-                <td>@d.DeviceType</td>
-                <td>@d.DisplayName</td>
-                <td>@d.LastSeenUtc.ToString("u")</td>
-                <td>@d.Status</td>
-            </tr>
-        }
-        </tbody>
-    </table>
-}
+    @if (Model.Devices == null || !Model.Devices.Any())
+    {
+        <p class="subtle">No devices found.</p>
+    }
+    else
+    {
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th>DeviceId</th>
+                    <th>Site</th>
+                    <th>Type</th>
+                    <th>Display</th>
+                    <th>Last Seen (UTC)</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var d in Model.Devices)
+                {
+                    <tr>
+                        <td>@d.DeviceId</td>
+                        <td>@d.SiteId</td>
+                        <td>@d.DeviceType</td>
+                        <td>@d.DisplayName</td>
+                        <td>@d.LastSeenUtc.ToString("u")</td>
+                        <td>
+                            @if (string.Equals(d.Status, "Online", StringComparison.OrdinalIgnoreCase))
+                            {
+                                <span class="pill pill-online">Online</span>
+                            }
+                            else
+                            {
+                                <span class="pill pill-offline">Offline</span>
+                            }
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
