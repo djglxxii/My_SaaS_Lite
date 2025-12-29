@@ -50,13 +50,19 @@ app.MapPost("/api/results", async (
 {
     // Minimal validation (PoC)
     if (string.IsNullOrWhiteSpace(request.ResultId))
+    {
         return Results.BadRequest("ResultId is required.");
+    }
 
     if (string.IsNullOrWhiteSpace(request.SiteId))
+    {
         return Results.BadRequest("SiteId is required.");
+    }
 
     if (string.IsNullOrWhiteSpace(request.DeviceId))
+    {
         return Results.BadRequest("DeviceId is required.");
+    }
 
     // Idempotency check
     var exists = await db.Results.AnyAsync(r => r.ResultId == request.ResultId);
@@ -69,19 +75,25 @@ app.MapPost("/api/results", async (
 
     var now = DateTime.UtcNow;
 
+    var collected = request.CollectedAtUtc == default ? now : request.CollectedAtUtc;
+    if (collected.Kind == DateTimeKind.Unspecified)
+    {
+        collected = DateTime.SpecifyKind(collected, DateTimeKind.Utc);
+    }
+
     var entity = new ResultEntity
     {
         ResultId = request.ResultId.Trim(),
         SiteId = request.SiteId.Trim(),
         DeviceId = request.DeviceId.Trim(),
-        EdgeAgentId = (request.EdgeAgentId ?? string.Empty).Trim(),
+        EdgeAgentId = (request.EdgeAgentId).Trim(),
 
-        CollectedAtUtc = request.CollectedAtUtc == default ? now : request.CollectedAtUtc,
+        CollectedAtUtc = collected,
         ReceivedAtUtc = now,
 
-        TestCode = (request.TestCode ?? string.Empty).Trim(),
-        PatientId = (request.PatientId ?? string.Empty).Trim(),
-        OperatorId = (request.OperatorId ?? string.Empty).Trim(),
+        TestCode = (request.TestCode).Trim(),
+        PatientId = (request.PatientId).Trim(),
+        OperatorId = (request.OperatorId).Trim(),
 
         NormalizedJson = string.IsNullOrWhiteSpace(request.NormalizedJson) ? "{}" : request.NormalizedJson,
         RawPayloadJson = string.IsNullOrWhiteSpace(request.RawPayloadJson) ? "{}" : request.RawPayloadJson,
@@ -116,13 +128,19 @@ app.MapGet("/api/results", async (
     var query = db.Results.AsNoTracking().AsQueryable();
 
     if (fromUtc.HasValue)
+    {
         query = query.Where(r => r.CollectedAtUtc >= fromUtc.Value);
+    }
 
     if (toUtc.HasValue)
+    {
         query = query.Where(r => r.CollectedAtUtc <= toUtc.Value);
+    }
 
     if (!string.IsNullOrWhiteSpace(deviceId))
+    {
         query = query.Where(r => r.DeviceId == deviceId.Trim());
+    }
 
     var list = await query
         .OrderByDescending(r => r.CollectedAtUtc)
@@ -148,11 +166,15 @@ app.MapGet("/api/results", async (
 app.MapGet("/api/results/{resultId}", async (string resultId, AppDbContext db) =>
 {
     if (string.IsNullOrWhiteSpace(resultId))
+    {
         return Results.BadRequest("resultId is required.");
+    }
 
     var r = await db.Results.AsNoTracking().FirstOrDefaultAsync(x => x.ResultId == resultId.Trim());
     if (r is null)
+    {
         return Results.NotFound();
+    }
 
     // Return full shape similar to Result entity for now (PoC)
     return Results.Ok(new
@@ -182,7 +204,9 @@ app.MapPost("/api/devices/{deviceId}/heartbeat", async (
     AppDbContext db) =>
 {
     if (string.IsNullOrWhiteSpace(deviceId))
+    {
         return Results.BadRequest("deviceId is required.");
+    }
 
     var now = DateTime.UtcNow;
 
@@ -202,9 +226,21 @@ app.MapPost("/api/devices/{deviceId}/heartbeat", async (
     }
     else
     {
-        if (!string.IsNullOrWhiteSpace(siteId)) existing.SiteId = siteId.Trim();
-        if (!string.IsNullOrWhiteSpace(deviceType)) existing.DeviceType = deviceType.Trim();
-        if (!string.IsNullOrWhiteSpace(displayName)) existing.DisplayName = displayName.Trim();
+        if (!string.IsNullOrWhiteSpace(siteId))
+        {
+            existing.SiteId = siteId.Trim();
+        }
+
+        if (!string.IsNullOrWhiteSpace(deviceType))
+        {
+            existing.DeviceType = deviceType.Trim();
+        }
+
+        if (!string.IsNullOrWhiteSpace(displayName))
+        {
+            existing.DisplayName = displayName.Trim();
+        }
+
         existing.LastSeenUtc = now;
     }
 
