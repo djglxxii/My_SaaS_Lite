@@ -3,9 +3,21 @@
 
 <h1>Results</h1>
 
-<p>This page lists ingested results from the Cloud API.</p>
+<form method="get" style="margin-bottom: 1rem;">
+    <label>DeviceId:</label>
+    <input name="DeviceId" value="@Model.DeviceId" />
 
-@if (Model.Results is null || !Model.Results.Any())
+    <label style="margin-left: 1rem;">From (UTC):</label>
+    <input name="FromUtc" value="@(Model.FromUtc?.ToString("yyyy-MM-ddTHH:mm") ?? "")" />
+
+    <label style="margin-left: 1rem;">To (UTC):</label>
+    <input name="ToUtc" value="@(Model.ToUtc?.ToString("yyyy-MM-ddTHH:mm") ?? "")" />
+
+    <button type="submit" style="margin-left: 1rem;">Filter</button>
+    <a href="/Results" style="margin-left: .5rem;">Clear</a>
+</form>
+
+@if (Model.Results == null || !Model.Results.Any())
 {
     <p>No results were found.</p>
 }
@@ -13,25 +25,27 @@ else
 {
     <table class="table table-bordered">
         <thead>
-            <tr>
-                <th>Result ID</th>
-                <th>Device</th>
-                <th>Collected At (UTC)</th>
-                <th>Test Code</th>
-                <th>Patient ID</th>
-            </tr>
+        <tr>
+            <th>Collected (UTC)</th>
+            <th>Received (UTC)</th>
+            <th>Device</th>
+            <th>Test</th>
+            <th>Patient</th>
+            <th>ResultId</th>
+        </tr>
         </thead>
         <tbody>
-            @foreach (var r in Model.Results)
-            {
-                <tr>
-                    <td>@r.ResultId</td>
-                    <td>@r.DeviceId</td>
-                    <td>@r.CollectedAtUtc</td>
-                    <td>@r.TestCode</td>
-                    <td>@r.PatientId</td>
-                </tr>
-            }
+        @foreach (var r in Model.Results)
+        {
+            <tr>
+                <td>@r.CollectedAtUtc.ToString("u")</td>
+                <td>@r.ReceivedAtUtc.ToString("u")</td>
+                <td>@r.DeviceId</td>
+                <td>@r.TestCode</td>
+                <td>@r.PatientId</td>
+                <td>@r.ResultId</td>
+            </tr>
+        }
         </tbody>
     </table>
 }

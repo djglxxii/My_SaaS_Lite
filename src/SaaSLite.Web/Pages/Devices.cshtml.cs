@@ -17,23 +17,13 @@ namespace SaaSLite.Web.Pages
             _clientFactory = clientFactory;
         }
 
-        public IList<Device> Devices { get; private set; } = new List<Device>();
+        public List<DeviceDto> Devices { get; private set; } = new List<DeviceDto>();
 
         public async Task OnGetAsync()
         {
             var client = _clientFactory.CreateClient("CloudApi");
-            try
-            {
-                var res = await client.GetFromJsonAsync<Device[]>("/api/devices");
-                if (res != null)
-                {
-                    Devices = res.ToList();
-                }
-            }
-            catch
-            {
-                // For demo swallow exceptions; an empty list will be shown.
-            }
+            var data = await client.GetFromJsonAsync<List<DeviceDto>>("api/devices");
+            Devices = data ?? new List<DeviceDto>();
         }
     }
 }
